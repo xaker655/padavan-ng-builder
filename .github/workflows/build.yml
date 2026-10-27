@@ -3,20 +3,17 @@ run-name: "Build firmware #${{ github.run_number }}"
 
 on:
   workflow_dispatch:
-  push:
-    tags:
-      - '*'
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     defaults:
       run:
         shell: bash
 
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
 
     - name: Set up build tools
       run: |
@@ -126,7 +123,7 @@ jobs:
           release/*
 
   prepare-matrix:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: build
     outputs:
       files: ${{ steps.collect.outputs.files }}
@@ -144,7 +141,7 @@ jobs:
           echo "files=$FILES" >> $GITHUB_OUTPUT
 
   upload-artifacts:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: prepare-matrix
     if: needs.prepare-matrix.outputs.files != '[]'
     strategy:
